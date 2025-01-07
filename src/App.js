@@ -1,73 +1,73 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate} from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
 import Pizzas from './components/Pizzas';
 import Order from './components/Order';
 
+import pizzaImage from './static/logo/freddy_logo.jpg';
+
 function App() {
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(() => localStorage.getItem('userId'));
 
   const handleLogin = (message, id) => {
     alert(message);
-    setUserId(id); // Save the userId after login
-  };
+    localStorage.setItem('userId', id); // Save the userId after login
+    setUserId(id);
+};
 
-  const handleLogout = () => {
-    setUserId(null); // Clear userId when logging out
-  };
+const handleLogout = () => {
+  localStorage.removeItem('userId'); // Clear userId when logging out
+  setUserId(null);
+};
 
   return (
     <Router>
-      <div style={{ textAlign: 'center', padding: '20px' }}>
-        <h1>Pizza Ordering System</h1>
-        <div style={{ marginBottom: '20px' }}>
+      <div>
+        <div>
           {!userId ? (
             <>
               <Link to="/register">
-                <button style={buttonStyle}>Register</button>
+                <button>Register</button>
               </Link>
               <Link to="/login">
-                <button style={buttonStyle}>Login</button>
+                <button>Login</button>
               </Link>
               <Link to="/pizzas">
-                <button style={buttonStyle}>Pizzas</button>
+                <button>Pizzas</button>
               </Link>
             </>
           ) : (
             <>
                <Link to="/pizzas">
-                <button style={buttonStyle}>Pizzas</button>
+                <button>Pizzas</button>
               </Link>
               <Link to="/order">
-                <button style={buttonStyle}>My Order</button>
+                <button>My Order</button>
               </Link>
-              <button onClick={handleLogout} style={buttonStyle}>Logout</button>
+              <button onClick={handleLogout}>Logout</button>
             </>
           )}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+          <img
+            src={pizzaImage}
+            alt="Pizza Image"
+            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+          />
         </div>
       </div>
 
       <Routes>
-        <Route path="/" element={<h2>Welcome to the Pizza Ordering App!</h2>} />
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/pizzas" element={<Pizzas />} />
-        <Route
-          path="/order"
-          element={userId ? <Order userId={userId} /> : <Navigate to="/login" />}
+        <Route path="/order" element={userId ? <Order userId={userId} /> : <Navigate to="/login" />}
         />
       </Routes>
     </Router>
   );
 }
-
-// Button Styling
-const buttonStyle = {
-  margin: '10px',
-  padding: '10px 20px',
-  fontSize: '16px',
-  cursor: 'pointer',
-};
 
 export default App;
