@@ -32,7 +32,9 @@ function Pizzas() {
   };
 
   const handleAddToCart = () => {
-    console.log(`Pizza added to cart: ${selectedPizza.name}`);
+    const cart = JSON.parse(localStorage.getItem('cart')) || []; 
+    cart.push(selectedPizza.name);
+    localStorage.setItem('cart', JSON.stringify(cart));
     setShowModal(false);
   };
 

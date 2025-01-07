@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, Navigate} from 'react-rou
 import Register from './components/Register';
 import Login from './components/Login';
 import Pizzas from './components/Pizzas';
-import Order from './components/Order';
+import Cart from './components/Cart';
 
 import pizzaImage from './static/logo/freddy_logo.jpg';
 
@@ -15,6 +15,13 @@ function App() {
     localStorage.setItem('userId', id); // Save the userId after login
     setUserId(id);
 };
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+useEffect(() => {
+  localStorage.clear();
+  // localStorage.removeItem('cart'); 
+}, []);
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 const handleLogout = () => {
   localStorage.removeItem('userId'); // Clear userId when logging out
@@ -42,8 +49,8 @@ const handleLogout = () => {
                <Link to="/pizzas">
                 <button>Pizzas</button>
               </Link>
-              <Link to="/order">
-                <button>My Order</button>
+              <Link to="/cart">
+                <button>Cart</button>
               </Link>
               <button onClick={handleLogout}>Logout</button>
             </>
@@ -59,12 +66,11 @@ const handleLogout = () => {
       </div>
 
       <Routes>
-        <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to="/pizzas" />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/pizzas" element={<Pizzas />} />
-        <Route path="/order" element={userId ? <Order userId={userId} /> : <Navigate to="/login" />}
-        />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
   );
