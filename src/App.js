@@ -4,6 +4,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Pizzas from './components/Pizzas';
 import Cart from './components/Cart';
+import Account from './components/Account';
 
 import pizzaImage from './static/logo/freddy_logo.jpg';
 
@@ -52,6 +53,9 @@ const handleLogout = () => {
               <Link to="/cart">
                 <button>Cart</button>
               </Link>
+              <Link to="/account">
+                <button>My Account</button>
+              </Link>
               <button onClick={handleLogout}>Logout</button>
             </>
           )}
@@ -71,6 +75,7 @@ const handleLogout = () => {
         <Route path="/login" element={<Login onLogin={handleLogin} />} />
         <Route path="/pizzas" element={<Pizzas />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/account" element={<Account />} />
       </Routes>
     </Router>
   );
