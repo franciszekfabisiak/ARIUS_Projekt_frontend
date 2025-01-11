@@ -14,6 +14,17 @@ function Pizzas() {
       try {
         const response = await axios.get('http://localhost:5000/pizzas');
         setPizzas(response.data);
+
+        // Save pizza details in localStorage as a map
+        const pizzaMap = {};
+        response.data.forEach((pizza) => {
+          pizzaMap[pizza.name] = {
+            id: pizza.id,
+            price: pizza.price,
+            image_url: pizza.image_url,
+          };
+        });
+        localStorage.setItem('pizzaMap', JSON.stringify(pizzaMap));
       } catch (error) {
         setError('Error fetching pizzas. Please try again later.');
       }
@@ -23,7 +34,6 @@ function Pizzas() {
 
   const handlePizzaClick = (pizza) => {
     if (!userId) {
-      // alert(userId)
       alert('You need to log in to add pizzas to the cart!');
     } else {
       setSelectedPizza(pizza);
@@ -32,8 +42,8 @@ function Pizzas() {
   };
 
   const handleAddToCart = () => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || []; 
-    cart.push(selectedPizza.name);
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(selectedPizza.name); // Only save pizza name in cart
     localStorage.setItem('cart', JSON.stringify(cart));
     setShowModal(false);
   };
@@ -82,7 +92,6 @@ function Pizzas() {
         <p>No pizzas available at the moment.</p>
       )}
 
-      {/* Modal */}
       {showModal && (
         <div style={modalStyles.overlay}>
           <div style={modalStyles.content}>
