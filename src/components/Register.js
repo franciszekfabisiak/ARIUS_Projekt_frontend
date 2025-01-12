@@ -9,7 +9,6 @@ function Register() {
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [telephone_number, setTelephoneNumber] = useState('');
-  const [address, setAddress] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
@@ -17,12 +16,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
-    if (!username || !email || !password || !name || !surname || !telephone_number || !address) {
-    setModalMessage('Please fill in all fields.');
-    setShowModal(true);
-    return;
-  }
+    if (!username || !email || !password || !name || !surname || !telephone_number) {
+      setModalMessage('Please fill in all fields.');
+      setShowModal(true);
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -34,7 +32,6 @@ function Register() {
           name,
           surname,
           telephone_number,
-          address,
         },
         {
           headers: {
@@ -42,6 +39,17 @@ function Register() {
           },
         }
       );
+
+      // Save user data to localStorage
+      const userData = {
+        username,
+        email,
+        name,
+        surname,
+        telephone_number,
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
+
       setModalMessage('Registration successful!');
       setShowModal(true);
     } catch (error) {
@@ -71,7 +79,6 @@ function Register() {
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          
         />
         <input
           type="email"
@@ -102,12 +109,6 @@ function Register() {
           placeholder="Phone number"
           value={telephone_number}
           onChange={(e) => setTelephoneNumber(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
         />
         <button type="submit">Register</button>
       </form>

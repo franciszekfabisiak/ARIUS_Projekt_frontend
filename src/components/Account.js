@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 function Account() {
   const [userData, setUserData] = useState(null); // User data state
   const [editMode, setEditMode] = useState(false); // Edit mode state
   const [editedData, setEditedData] = useState({}); // Temporarily store edited data
 
-  // Fetch user data from backend
+  // Fetch user data from localStorage on component mount
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/user'); // Adjust the endpoint as needed
-        setUserData(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
-    fetchUserData();
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      setUserData(JSON.parse(storedUserData));
+    }
   }, []);
 
   // Handle field changes in edit mode
@@ -28,15 +21,12 @@ function Account() {
     });
   };
 
-  // Save changes to backend
-  const handleSave = async () => {
-    try {
-      await axios.put('http://localhost:5000/user', editedData); // Adjust the endpoint as needed
-      setUserData((prev) => ({ ...prev, ...editedData }));
-      setEditMode(false);
-    } catch (error) {
-      console.error('Error saving user data:', error);
-    }
+  // Save changes to localStorage
+  const handleSave = () => {
+    const updatedData = { ...userData, ...editedData };
+    localStorage.setItem('userData', JSON.stringify(updatedData));
+    setUserData(updatedData);
+    setEditMode(false);
   };
 
   // Render the component
@@ -47,11 +37,11 @@ function Account() {
         <div>
           {!editMode ? (
             <>
-                <p>Username: {userData?.username || 'N/A'}</p>
-                <p>Email: {userData?.email || 'N/A'}</p>
-                <p>Name: {userData?.name || 'N/A'}</p>
-                <p>Surname: {userData?.surname || 'N/A'}</p>
-                <p>Telephone: {userData?.telephone_number || 'N/A'}</p>
+              <p>Username: {userData?.username || 'N/A'}</p>
+              <p>Email: {userData?.email || 'N/A'}</p>
+              <p>Name: {userData?.name || 'N/A'}</p>
+              <p>Surname: {userData?.surname || 'N/A'}</p>
+              <p>Telephone: {userData?.telephone_number || 'N/A'}</p>
               <button onClick={() => setEditMode(true)}>Edit</button>
             </>
           ) : (
@@ -107,7 +97,7 @@ function Account() {
           )}
         </div>
       ) : (
-        <p>Loading user data...</p>
+        <p>No user data found in local storage. Please register first.</p>
       )}
     </div>
   );
