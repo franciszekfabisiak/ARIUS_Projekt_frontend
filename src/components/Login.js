@@ -1,20 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Zaimportuj useNavigate
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); // Zainicjuj hook navigate
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("storedUserData", localStorage.getItem('userData'));
     try {
       const response = await axios.post('http://localhost:5000/login', {
         username,
         password
       });
-      // Pass the success message and userId to the parent (App component)
+
+      // Przechowuj dane w localStorage
+      localStorage.setItem('userId', response.data.userId);
+
+      // Przekaż dane do rodzica
       onLogin(response.data.message, response.data.userId);
+
+      // Po udanym logowaniu przekieruj na stronę /pizzas
+      console.log("storedUserData", localStorage.getItem('userData'));
+      navigate('/pizzas');
     } catch (error) {
       setErrorMessage('Invalid credentials');
     }

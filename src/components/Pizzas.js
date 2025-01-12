@@ -8,10 +8,12 @@ function Pizzas() {
   const [selectedPizza, setSelectedPizza] = useState(null); // Selected pizza
 
   const userId = localStorage.getItem('userId');
+  console.log("storedUserData", localStorage.getItem('userData'));
 
   useEffect(() => {
     const fetchPizzas = async () => {
       try {
+        console.log("ID usera", userId);
         const response = await axios.get('http://localhost:5000/pizzas');
         setPizzas(response.data);
 

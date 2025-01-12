@@ -9,6 +9,9 @@ function Cart() {
   const [currentPizza, setCurrentPizza] = useState(null);
   const [toppings, setToppings] = useState([]);
   const [selectedToppings, setSelectedToppings] = useState([]);
+  const [deliveryDate, setDeliveryDate] = useState(""); // State for delivery date
+  const [deliveryTime, setDeliveryTime] = useState(""); // State for delivery time
+  const [deliveryAddress, setDeliveryAddress] = useState(""); // State for delivery address
 
   // Load cart and pizza details
   useEffect(() => {
@@ -76,23 +79,43 @@ function Cart() {
       return;
     }
 
+    if (!deliveryDate || !deliveryTime || !deliveryAddress) {
+      alert("Please complete all fields: delivery date, time, and address.");
+      return;
+    }
+
+    // Combine date and time into a single timestamp
+    const combinedDateTime = `${deliveryDate} ${deliveryTime}:00`; // Add seconds for format compatibility
+
     const order = {
       user_id: userId,
       items: pizzaDetails.map((pizza) => ({
         pizza_id: pizza.id, // Ensure each pizza has an `id`
         topping_ids: pizza.topping_ids || [],
       })),
+      delivery_time: combinedDateTime,
+      location: deliveryAddress,
     };
-
+    console.log("userId", userId);
     try {
-      console.log("order", order);
-      console.log("pizza id", pizzaDetails[0])
       const response = await axios.post('http://localhost:5000/order', order);
-      if (response.status === 200) {
+  
+      if (response.status === 201) {
+        // Save order_id to localStorage
+        localStorage.setItem('order_id', response.data.order_id);
+        console.log("userId", userId);
+        // Alert and reset form state
         alert("Order placed successfully!");
         setCartItems([]);
         setPizzaDetails([]);
+        setDeliveryDate("");
+        setDeliveryTime("");
+        setDeliveryAddress("");
+        console.log('userId przed', localStorage.getItem('userId'));
         localStorage.removeItem('cart');
+        console.log('userId po', localStorage.getItem('userId'));
+        // Redirect to the rate page
+        window.location.href = "/rate"; // Redirect using window.location
       }
     } catch (error) {
       console.error('Error placing order:', error);
@@ -128,6 +151,62 @@ function Cart() {
           >
             {renderRow}
           </FixedSizeList>
+
+          {/* Delivery Address Input */}
+          <div style={{ marginTop: '20px' }}>
+            <label>
+              Delivery Address:
+              <input
+                type="text"
+                value={deliveryAddress}
+                onChange={(e) => setDeliveryAddress(e.target.value)}
+                placeholder="Enter your delivery address"
+                style={{
+                  marginLeft: '10px',
+                  padding: '5px',
+                  width: '300px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                }}
+              />
+            </label>
+          </div>
+
+          {/* Delivery Date and Time Input */}
+          <div style={{ marginTop: '10px' }}>
+            <label>
+              Delivery Date:
+              <input
+                type="date"
+                value={deliveryDate}
+                onChange={(e) => setDeliveryDate(e.target.value)}
+                style={{
+                  marginLeft: '10px',
+                  padding: '5px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                }}
+              />
+            </label>
+          </div>
+
+          <div style={{ marginTop: '10px' }}>
+            <label>
+              Delivery Time (HH:mm):
+              <input
+                type="time"
+                value={deliveryTime}
+                onChange={(e) => setDeliveryTime(e.target.value)}
+                style={{
+                  marginLeft: '10px',
+                  padding: '5px',
+                  border: '1px solid #ccc',
+                  borderRadius: '5px',
+                }}
+              />
+            </label>
+          </div>
+
           <button
             onClick={handlePlaceOrder}
             style={{

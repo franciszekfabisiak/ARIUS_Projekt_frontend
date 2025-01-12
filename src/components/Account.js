@@ -1,15 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function Account() {
   const [userData, setUserData] = useState(null); // User data state
   const [editMode, setEditMode] = useState(false); // Edit mode state
   const [editedData, setEditedData] = useState({}); // Temporarily store edited data
+  const [orders, setOrders] = useState([]); // Orders state
 
-  // Fetch user data from localStorage on component mount
+  console.log("storedUserData", localStorage.getItem('userData'));
+
+  // Fetch user data and orders from localStorage and API
   useEffect(() => {
+    const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
     const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
+
+    if (userId && storedUserData) {
       setUserData(JSON.parse(storedUserData));
+
+      // Fetch orders for the user from the backend
+      axios
+        .get(`http://localhost:5000/orders/${userId}`)
+        .then((response) => {
+          setOrders(response.data); // Set orders in the state
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+        });
+    } else {
+      console.error("User data or userId not found in localStorage.");
     }
   }, []);
 
@@ -21,11 +39,31 @@ function Account() {
     });
   };
 
-  // Save changes to localStorage
-  const handleSave = () => {
+  // Save changes to localStorage and send to backend
+  const handleSave = async () => {
+    const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+
+    if (!userId) {
+      console.error("User ID is missing in localStorage.");
+      return;
+    }
+
     const updatedData = { ...userData, ...editedData };
-    localStorage.setItem('userData', JSON.stringify(updatedData));
+    localStorage.setItem('userData', JSON.stringify(updatedData)); // Save updated data to localStorage
     setUserData(updatedData);
+    console.log("updatedData", updatedData);
+
+    try {
+      await axios.put(`http://localhost:5000/update_user/${userId}`, updatedData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log("User data successfully updated on the server.");
+    } catch (error) {
+      console.error("Error updating user data on the server:", error);
+    }
+
     setEditMode(false);
   };
 
@@ -53,6 +91,7 @@ function Account() {
                   name="username"
                   defaultValue={userData.username}
                   onChange={handleChange}
+                  disabled // Username should not be editable
                 />
               </label>
               <label>
@@ -95,9 +134,35 @@ function Account() {
               <button onClick={() => setEditMode(false)}>Cancel</button>
             </>
           )}
+
+          {/* My Orders Section */}
+          <div>
+            <h3>My Orders</h3>
+            {orders.length === 0 ? (
+              <p>No orders found.</p>
+            ) : (
+              <ul>
+                {orders.map((order) => (
+                  <li key={order.order_id}>
+                    <h4>Order ID: {order.order_id}</h4>
+                    <p>Created at: {order.created_at}</p>
+                    <p>Delivery time: {order.delivery_time}</p>
+                    <p>Location: {order.location}</p>
+                    <ul>
+                      {order.items.map((item, index) => (
+                        <li key={index}>
+                          <strong>{item.pizza}</strong> - Toppings: {item.toppings.join(", ")}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       ) : (
-        <p>No user data found in local storage. Please register first.</p>
+        <p>No user data found in local storage. Please log in first.</p>
       )}
     </div>
   );

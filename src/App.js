@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Pizzas from './components/Pizzas';
 import Cart from './components/Cart';
 import Account from './components/Account';
+import Rate from './components/Rate';
 
 import pizzaImage from './static/logo/freddy_logo.jpg';
 
@@ -18,10 +19,10 @@ function App() {
 };
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-useEffect(() => {
-  localStorage.clear();
+// useEffect(() => {
+  // localStorage.clear();
   // localStorage.removeItem('cart'); 
-}, []);
+// }, []);
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 const handleLogout = () => {
@@ -76,6 +77,7 @@ const handleLogout = () => {
         <Route path="/pizzas" element={<Pizzas />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/rate" element={<Rate />} />
       </Routes>
     </Router>
   );
