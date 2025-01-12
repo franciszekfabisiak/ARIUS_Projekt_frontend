@@ -9,6 +9,8 @@ import Rate from './components/Rate';
 
 import pizzaImage from './static/logo/freddy_logo.jpg';
 
+import './style.css';
+
 function App() {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId'));
   const location = useLocation(); // Hook to get current location
@@ -33,27 +35,27 @@ function App() {
             {!userId ? (
               <>
                 <Link to="/register">
-                  <button>Register</button>
+                  <button className="button">Register</button>
                 </Link>
                 <Link to="/login">
-                  <button>Login</button>
+                  <button className="button">Login</button>
                 </Link>
                 <Link to="/pizzas">
-                  <button>Pizzas</button>
+                  <button className="button">Pizzas</button>
                 </Link>
               </>
             ) : (
               <>
                 <Link to="/pizzas">
-                  <button>Pizzas</button>
+                  <button className="button">Pizzas</button>
                 </Link>
                 <Link to="/cart">
-                  <button>Cart</button>
+                  <button className="button">Cart</button>
                 </Link>
                 <Link to="/account">
-                  <button>My Account</button>
+                  <button className="button">My Account</button>
                 </Link>
-                <button onClick={handleLogout}>Logout</button>
+                <button className="button logout" onClick={handleLogout}>Logout</button>
               </>
             )}
           </div>

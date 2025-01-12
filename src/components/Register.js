@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Register.css'; // Import the CSS file
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -73,52 +74,58 @@ function Register() {
 
   return (
     <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 className="register-header">Register</h2>
+      <form className="register-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          className="register-input"
         />
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="register-input"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="register-input"
         />
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className="register-input"
         />
         <input
           type="text"
           placeholder="Surname"
           value={surname}
           onChange={(e) => setSurname(e.target.value)}
+          className="register-input"
         />
         <input
           type="text"
           placeholder="Phone number"
           value={telephone_number}
           onChange={(e) => setTelephoneNumber(e.target.value)}
+          className="register-input"
         />
-        <button type="submit">Register</button>
+        <button type="submit" className="register-button">Register</button>
       </form>
 
       {showModal && (
-        <div style={modalStyles.overlay}>
-          <div style={modalStyles.content}>
+        <div className="modal-overlay">
+          <div className="modal-content">
             <p>{modalMessage}</p>
-            <button onClick={handleCloseModal} style={modalStyles.button}>
+            <button onClick={handleCloseModal} className="modal-button">
               Close
             </button>
           </div>
@@ -127,31 +134,5 @@ function Register() {
     </div>
   );
 }
-
-const modalStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  content: {
-    background: '#fff',
-    padding: '20px',
-    borderRadius: '10px',
-    textAlign: 'center',
-  },
-  button: {
-    marginTop: '10px',
-    padding: '10px 20px',
-    cursor: 'pointer',
-  },
-};
 
 export default Register;

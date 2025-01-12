@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Account.css';
 
 function Account() {
   const [userData, setUserData] = useState(null); // User data state
@@ -7,9 +8,6 @@ function Account() {
   const [editedData, setEditedData] = useState({}); // Temporarily store edited data
   const [orders, setOrders] = useState([]); // Orders state
 
-  console.log("storedUserData", localStorage.getItem('userData'));
-
-  // Fetch user data and orders from localStorage and API
   useEffect(() => {
     const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
     const storedUserData = localStorage.getItem('userData');
@@ -31,7 +29,6 @@ function Account() {
     }
   }, []);
 
-  // Handle field changes in edit mode
   const handleChange = (e) => {
     setEditedData({
       ...editedData,
@@ -39,9 +36,8 @@ function Account() {
     });
   };
 
-  // Save changes to localStorage and send to backend
   const handleSave = async () => {
-    const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+    const userId = localStorage.getItem('userId');
 
     if (!userId) {
       console.error("User ID is missing in localStorage.");
@@ -51,7 +47,6 @@ function Account() {
     const updatedData = { ...userData, ...editedData };
     localStorage.setItem('userData', JSON.stringify(updatedData)); // Save updated data to localStorage
     setUserData(updatedData);
-    console.log("updatedData", updatedData);
 
     try {
       await axios.put(`http://localhost:5000/update_user/${userId}`, updatedData, {
@@ -67,23 +62,22 @@ function Account() {
     setEditMode(false);
   };
 
-  // Render the component
   return (
-    <div>
+    <div className="account-container">
       <h2>Account Details</h2>
       {userData ? (
         <div>
           {!editMode ? (
-            <>
+            <div className="account-details">
               <p>Username: {userData?.username || 'N/A'}</p>
               <p>Email: {userData?.email || 'N/A'}</p>
               <p>Name: {userData?.name || 'N/A'}</p>
               <p>Surname: {userData?.surname || 'N/A'}</p>
               <p>Telephone: {userData?.telephone_number || 'N/A'}</p>
-              <button onClick={() => setEditMode(true)}>Edit</button>
-            </>
+              <button className="edit-button" onClick={() => setEditMode(true)}>Edit</button>
+            </div>
           ) : (
-            <>
+            <div className="edit-form">
               <label>
                 Username:
                 <input
@@ -130,20 +124,20 @@ function Account() {
                   onChange={handleChange}
                 />
               </label>
-              <button onClick={handleSave}>Save</button>
-              <button onClick={() => setEditMode(false)}>Cancel</button>
-            </>
+              <button className="save-button" onClick={handleSave}>Save</button>
+              <button className="cancel-button" onClick={() => setEditMode(false)}>Cancel</button>
+            </div>
           )}
 
           {/* My Orders Section */}
-          <div>
+          <div className="orders-section">
             <h3>My Orders</h3>
             {orders.length === 0 ? (
               <p>No orders found.</p>
             ) : (
-              <ul>
+              <ul className="orders-list">
                 {orders.map((order) => (
-                  <li key={order.order_id}>
+                  <li key={order.order_id} className="order-item">
                     <h4>Order ID: {order.order_id}</h4>
                     <p>Created at: {order.created_at}</p>
                     <p>Delivery time: {order.delivery_time}</p>

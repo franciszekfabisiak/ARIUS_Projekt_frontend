@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Pizzas.css';
 
 function Pizzas() {
   const [pizzas, setPizzas] = useState([]);
   const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Modal visibility
-  const [selectedPizza, setSelectedPizza] = useState(null); // Selected pizza
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPizza, setSelectedPizza] = useState(null);
 
   const userId = localStorage.getItem('userId');
-  console.log("storedUserData", localStorage.getItem('userData'));
 
   useEffect(() => {
     const fetchPizzas = async () => {
       try {
-        console.log("ID usera", userId);
         const response = await axios.get('http://localhost:5000/pizzas');
         setPizzas(response.data);
 
-        // Save pizza details in localStorage as a map
         const pizzaMap = {};
         response.data.forEach((pizza) => {
           pizzaMap[pizza.name] = {
@@ -45,7 +43,7 @@ function Pizzas() {
 
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    cart.push(selectedPizza.name); // Only save pizza name in cart
+    cart.push(selectedPizza.name);
     localStorage.setItem('cart', JSON.stringify(cart));
     setShowModal(false);
   };
@@ -54,55 +52,53 @@ function Pizzas() {
     setShowModal(false);
   };
 
-
   return (
-    <div style={{ padding: '20px', textAlign: 'center' }}>
-      <h2>Available Pizzas</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="pizzas-container">
+      <h2 className="pizzas-header">Available Pizzas</h2>
+      {error && <p className="pizzas-error">{error}</p>}
+      
       {pizzas.length > 0 ? (
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
+        <div className="pizzas-grid">
           {pizzas.map((pizza) => (
             <div
               key={pizza.id}
-              onClick={() => handlePizzaClick(pizza)} // Handle click on pizza
-              style={{
-                border: '1px solid #ccc',
-                borderRadius: '10px',
-                padding: '10px',
-                width: '250px',
-                textAlign: 'left',
-                cursor: 'pointer',
-              }}
+              className="pizza-card"
+              onClick={() => handlePizzaClick(pizza)}
             >
               <img
                 src={pizza.image_url}
                 alt={pizza.name}
-                style={{
-                  width: '100%',
-                  borderRadius: '10px 10px 0 0',
-                }}
+                className="pizza-image"
               />
-              <h3>{pizza.name}</h3>
-              <p>{pizza.details}</p>
-              <p>
-                <strong>Price:</strong> ${pizza.price.toFixed(2)}
-              </p>
+              <div className="pizza-content">
+                <h3 className="pizza-name">{pizza.name}</h3>
+                <p className="pizza-details">{pizza.details}</p>
+                <p className="pizza-price">${pizza.price.toFixed(2)}</p>
+              </div>
             </div>
           ))}
         </div>
       ) : (
-        <p>No pizzas available at the moment.</p>
+        <p className="pizzas-empty">No pizzas available at the moment.</p>
       )}
 
       {showModal && (
-        <div style={modalStyles.overlay}>
-          <div style={modalStyles.content}>
-            <p>Do you want to add <strong>{selectedPizza.name}</strong> to the cart?</p>
-            <div style={{ marginTop: '20px' }}>
-              <button onClick={handleAddToCart} style={modalStyles.button}>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p className="modal-text">
+              Do you want to add <strong>{selectedPizza.name}</strong> to the cart?
+            </p>
+            <div className="modal-buttons">
+              <button 
+                className="modal-button modal-button-confirm"
+                onClick={handleAddToCart}
+              >
                 Yes
               </button>
-              <button onClick={handleCancel} style={modalStyles.button}>
+              <button 
+                className="modal-button modal-button-cancel"
+                onClick={handleCancel}
+              >
                 No
               </button>
             </div>
@@ -112,36 +108,5 @@ function Pizzas() {
     </div>
   );
 }
-
-const modalStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 1000,
-  },
-  content: {
-    background: '#fff',
-    padding: '20px',
-    borderRadius: '10px',
-    textAlign: 'center',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  button: {
-    margin: '10px',
-    padding: '10px 20px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-    background: '#f0f0f0',
-  },
-};
 
 export default Pizzas;

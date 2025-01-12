@@ -1,0 +1,171 @@
+/* Main Container */
+.pizzas-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.pizzas-header {
+    color: #d63031;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Error Message */
+.pizzas-error {
+    color: #d63031;
+    background-color: #ffeded;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Pizza Grid */
+.pizzas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+/* Pizza Card */
+.pizza-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.pizza-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Pizza Image */
+.pizza-image {
+    width: 100%;
+    height: 150px;  /* Smaller image size */
+    object-fit: cover;
+}
+
+/* Pizza Content */
+.pizza-content {
+    padding: 1.5rem;
+}
+
+/* Pizza Name */
+.pizza-name {
+    color: #2d3436;
+    font-size: 1.2rem;  /* Smaller font size */
+    margin: 0 0 0.5rem 0;
+}
+
+/* Pizza Details */
+.pizza-details {
+    color: #636e72;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+/* Pizza Price */
+.pizza-price {
+    color: #d63031;
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/* Empty State */
+.pizzas-empty {
+    text-align: center;
+    color: #636e72;
+    font-size: 1.2rem;
+    padding: 2rem;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-text {
+    font-size: 1.2rem;
+    color: #2d3436;
+    margin-bottom: 1.5rem;
+}
+
+/* Modal Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.modal-button {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Confirm Button */
+.modal-button-confirm {
+    background-color: #00b894;
+    color: white;
+    border: none;
+}
+
+.modal-button-confirm:hover {
+    background-color: #00a884;
+}
+
+/* Cancel Button */
+.modal-button-cancel {
+    background-color: #ff7675;
+    color: white;
+    border: none;
+}
+
+.modal-button-cancel:hover {
+    background-color: #d63031;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pizzas-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .pizza-content {
+        padding: 1rem;
+    }
+}
