@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link, Navigate} from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Link, Navigate, useLocation } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
 import Pizzas from './components/Pizzas';
@@ -11,63 +11,61 @@ import pizzaImage from './static/logo/freddy_logo.jpg';
 
 function App() {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId'));
+  const location = useLocation(); // Hook to get current location
 
   const handleLogin = (message, id) => {
     alert(message);
     localStorage.setItem('userId', id); // Save the userId after login
     setUserId(id);
-};
+  };
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// useEffect(() => {
-  // localStorage.clear();
-  // localStorage.removeItem('cart'); 
-// }, []);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-const handleLogout = () => {
-  localStorage.removeItem('userId'); // Clear userId when logging out
-  setUserId(null);
-};
+  const handleLogout = () => {
+    localStorage.removeItem('userId'); // Clear userId when logging out
+    setUserId(null);
+  };
 
   return (
-    <Router>
+    <div>
       <div>
-        <div>
-          {!userId ? (
-            <>
-              <Link to="/register">
-                <button>Register</button>
-              </Link>
-              <Link to="/login">
-                <button>Login</button>
-              </Link>
-              <Link to="/pizzas">
-                <button>Pizzas</button>
-              </Link>
-            </>
-          ) : (
-            <>
-               <Link to="/pizzas">
-                <button>Pizzas</button>
-              </Link>
-              <Link to="/cart">
-                <button>Cart</button>
-              </Link>
-              <Link to="/account">
-                <button>My Account</button>
-              </Link>
-              <button onClick={handleLogout}>Logout</button>
-            </>
-          )}
-        </div>
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <img
-            src={pizzaImage}
-            alt="Pizza Image"
-            style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
-          />
-        </div>
+        {/* Show navigation buttons only if not on /rate */}
+        {location.pathname !== '/rate' && (
+          <div>
+            {!userId ? (
+              <>
+                <Link to="/register">
+                  <button>Register</button>
+                </Link>
+                <Link to="/login">
+                  <button>Login</button>
+                </Link>
+                <Link to="/pizzas">
+                  <button>Pizzas</button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/pizzas">
+                  <button>Pizzas</button>
+                </Link>
+                <Link to="/cart">
+                  <button>Cart</button>
+                </Link>
+                <Link to="/account">
+                  <button>My Account</button>
+                </Link>
+                <button onClick={handleLogout}>Logout</button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div style={{ textAlign: 'center', marginTop: '20px' }}>
+        <img
+          src={pizzaImage}
+          alt="Pizza Image"
+          style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+        />
       </div>
 
       <Routes>
@@ -79,8 +77,14 @@ const handleLogout = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/rate" element={<Rate />} />
       </Routes>
-    </Router>
+    </div>
   );
 }
 
-export default App;
+export default function Wrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
