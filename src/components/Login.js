@@ -11,16 +11,19 @@ function Login({ onLogin }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("storedUserData", localStorage.getItem('userData'));
     try {
       const response = await axios.post('http://localhost:5000/login', {
         username,
         password
       });
 
+      // Zapisz userId w localStorage
       localStorage.setItem('userId', response.data.userId);
+      
+      // Przekaż komunikat i userId do rodzica
       onLogin(response.data.message, response.data.userId);
-      console.log("storedUserData", localStorage.getItem('userData'));
+
+      // Zaloguj i przejdź do strony pizz
       navigate('/pizzas');
     } catch (error) {
       setErrorMessage('Invalid credentials');
@@ -46,7 +49,7 @@ function Login({ onLogin }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit" className="login-button">
+        <button type="submit" className="login-button" id="login-submit">
           Login
         </button>
       </form>

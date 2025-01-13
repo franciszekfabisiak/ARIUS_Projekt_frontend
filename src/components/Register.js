@@ -74,7 +74,7 @@ function Register() {
 
   return (
     <div>
-      <h2 className="register-header">Register</h2>
+      <h2 className="register-header"> Register</h2>
       <form className="register-form" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -118,7 +118,7 @@ function Register() {
           onChange={(e) => setTelephoneNumber(e.target.value)}
           className="register-input"
         />
-        <button type="submit" className="register-button">Register</button>
+        <button type="submit" className="register-button" id="register-submit">Register</button>
       </form>
 
       {showModal && (
