@@ -50,7 +50,6 @@ function Register() {
         telephone_number,
       };
       localStorage.setItem('userData', JSON.stringify(userData));
-      console.log("userData", userData);
       setModalMessage('Registration successful!');
       setShowModal(true);
     } catch (error) {
@@ -64,11 +63,10 @@ function Register() {
 
   const handleCloseModal = () => {
     if (modalMessage === 'Please fill in all fields.') {
-      setShowModal(false); // Po kliknięciu Close tylko zamykamy modal
+      setShowModal(false);
     } else {
       setShowModal(false);
-      localStorage.setItem('test', 222);
-      navigate('/login'); // Jeśli formularz został poprawnie wysłany, przekierowanie do loginu
+      navigate('/login');
     }
   };
 

@@ -16,28 +16,22 @@ import './style.css';
 
 function App() {
   const [userId, setUserId] = useState(() => localStorage.getItem('userId'));
-  const [loginMessage, setLoginMessage] = useState('');
-  const location = useLocation(); // Hook to get current location
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogin = (message, id) => {
-    setLoginMessage(message);  // Set the login message
     localStorage.setItem('userId', id); // Save the userId after login
     setUserId(id);
   };
 
   const handleLogout = () => {
     localStorage.removeItem('userId'); // Clear userId when logging out
-    navigate('/pizzas');
     setUserId(null);
-    setLoginMessage('');  // Reset login message on logout
+    navigate('/pizzas');
   };
 
   return (
     <div>
-      {/* Display login message after login */}
-      {loginMessage && <div className="login-message">{loginMessage}</div>}
-
       <div>
         {/* Show navigation buttons only if not on /rate */}
         {location.pathname !== '/rate' && (

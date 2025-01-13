@@ -54,7 +54,6 @@ function Account() {
           'Content-Type': 'application/json',
         },
       });
-      console.log("User data successfully updated on the server.");
     } catch (error) {
       console.error("Error updating user data on the server:", error);
     }
@@ -85,7 +84,7 @@ function Account() {
                   name="username"
                   defaultValue={userData.username}
                   onChange={handleChange}
-                  disabled // Username should not be editable
+                  disabled
                 />
               </label>
               <label>

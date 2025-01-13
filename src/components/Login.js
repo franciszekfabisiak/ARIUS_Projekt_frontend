@@ -17,13 +17,8 @@ function Login({ onLogin }) {
         password
       });
 
-      // Zapisz userId w localStorage
       localStorage.setItem('userId', response.data.userId);
-      
-      // Przekaż komunikat i userId do rodzica
       onLogin(response.data.message, response.data.userId);
-
-      // Zaloguj i przejdź do strony pizz
       navigate('/pizzas');
     } catch (error) {
       setErrorMessage('Invalid credentials');

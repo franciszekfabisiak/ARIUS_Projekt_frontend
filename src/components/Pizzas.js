@@ -24,7 +24,6 @@ function Pizzas() {
             image_url: pizza.image_url,
           };
         });
-        console.log(response.data[0].name);
         localStorage.setItem('pizzaMap', JSON.stringify(pizzaMap));
       } catch (error) {
         setError('Error fetching pizzas. Please try again later.');
