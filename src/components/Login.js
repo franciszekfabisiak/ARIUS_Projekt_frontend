@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,31 +16,42 @@ function Login({ onLogin }) {
         username,
         password
       });
-      // Pass the success message and userId to the parent (App component)
+
+      // Zapisz userId w localStorage
+      localStorage.setItem('userId', response.data.userId);
+      
+      // Przekaż komunikat i userId do rodzica
       onLogin(response.data.message, response.data.userId);
+
+      // Zaloguj i przejdź do strony pizz
+      navigate('/pizzas');
     } catch (error) {
       setErrorMessage('Invalid credentials');
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      <form onSubmit={handleSubmit}>
+    <div className="login-container">
+      <h2 className="login-header">Login</h2>
+      {errorMessage && <div className="login-error">{errorMessage}</div>}
+      <form className="login-form" onSubmit={handleSubmit}>
         <input
           type="text"
+          className="login-input"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="password"
+          className="login-input"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Login</button>
+        <button type="submit" className="login-button" id="login-submit">
+          Login
+        </button>
       </form>
     </div>
   );

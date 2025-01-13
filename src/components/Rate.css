@@ -1,0 +1,106 @@
+/* Rate Container */
+.rate-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Rate Header */
+  .rate-header {
+    color: #d63031;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+  }
+  
+  /* Rate Form */
+  .rate-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Form Group */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-label {
+    font-weight: 500;
+    color: #2d3436;
+    font-size: 1.1rem;
+  }
+  
+  /* Rating Input */
+  .rating-input {
+    padding: 10px;
+    border: 2px solid #dfe6e9;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 80px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .rating-input:focus {
+    border-color: #74b9ff;
+    outline: none;
+  }
+  
+  /* Comment Textarea */
+  .comment-textarea {
+    padding: 12px;
+    border: 2px solid #dfe6e9;
+    border-radius: 6px;
+    font-size: 1rem;
+    width: 100%;
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+  
+  .comment-textarea:focus {
+    border-color: #74b9ff;
+    outline: none;
+  }
+  
+  .comment-textarea::placeholder {
+    color: #b2bec3;
+  }
+  
+  /* Submit Button */
+  .rate-submit-button {
+    margin-top: 0.5rem;
+    padding: 12px 24px;
+    background-color: #00b894;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    align-self: center;
+  }
+  
+  .rate-submit-button:hover {
+    background-color: #00a884;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .rate-container {
+      margin: 20px;
+      padding: 1.5rem;
+    }
+  
+    .comment-textarea {
+      min-height: 100px;
+    }
+  }
